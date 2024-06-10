@@ -1,0 +1,15 @@
+{
+  "name": "bun-htmx",
+  "module": "index.ts",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/mustache": "^4.2.5"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "type": "module",
+  "dependencies": {
+    "mustache": "^4.2.0"
+  }
+}
