@@ -1,11 +1,46 @@
 import Mustache from "mustache";
+import { initDatabase } from "./database/init";
+import { getAllEquipment } from "./database";
 
 const PORT = process.env.PORT || 3033;
+
+initDatabase()
 
 const server = Bun.serve({
   port: PORT,
   async fetch(req) {
     const url = new URL(req.url);
+
+    if (url.pathname === "/css/style.css") {
+      return new Response(Bun.file("./public/css/style.css"),{headers: {'Content-Type': 'text/css'}})
+    }
+
+    if (url.pathname === "/equipment") {
+      if(req.method === 'GET') {
+        const eqipment = getAllEquipment()
+        if(!  eqipment) {
+          const fragment = await Bun.file("./view/five-hundred.html").text()
+          return new Response(fragment, {headers:{'Content-Type': 'html'}});
+        }
+
+        const template = await Bun.file("./index.html").text()
+        const fragment = await Bun.file("./view/equipment.html").text()
+  
+        const page = Mustache.render(template, {list: eqipment}, {
+          page: fragment,
+        });
+
+        return new Response(page, {headers:{'Content-Type': 'html'}});
+      }
+
+      if(req.method === 'POST') {
+        const eqipment = getAllEquipment()
+        const fragment = await Bun.file("./view/equipment.html").text()
+        const enriched = Mustache.render(fragment, {list: eqipment});
+
+        return new Response(enriched, {headers:{'Content-Type': 'html'}});
+      }
+    }
   
     if (url.pathname === "/") {
       if(req.method === 'GET') {
@@ -73,10 +108,6 @@ const server = Bun.serve({
         const fragment = await Bun.file("./view/hand-to-hand.html").text()
         return new Response(fragment, {headers:{'Content-Type': 'html'}});
       }
-    }
-
-    if (url.pathname === "/css/style.css") {
-      return new Response(Bun.file("./public/css/style.css"),{headers: {'Content-Type': 'text/css'}})
     }
 
     const fragment = await Bun.file("./view/four-oh-four.html").text()
