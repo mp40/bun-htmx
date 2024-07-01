@@ -1,0 +1,14 @@
+<div class="page-div character-page">
+    <h1>Characters</h1>
+    <button 
+        type="button"
+        hx-post="/character/list"
+        hx-trigger="click"
+        hx-target=".character-list"
+        hx-swap="outerHTML"
+    >
+        create
+    </button>
+    {{> characterList}}
+    </div>
+</div>  
