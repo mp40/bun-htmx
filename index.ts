@@ -141,22 +141,24 @@ const server = Bun.serve({
 
     if (url.pathname === "/character/list") {
       if(req.method === 'POST') {
-        const d = new Date()
         const payload = {
           userId: 1,
-          name: `${getRandomName()}_${d.getMilliseconds()}`,
+          name: getRandomName(),
           str: 10,
           int: 10,
           wil: 10,
           hlt: 10,
           agi:10,
         }
-        createCharacter(payload)
+        const character = createCharacter(payload)
+        if(!character) {
+          //something something handle null
+        }
+        console.log(character)
 
-        const characters = getCharactersByUser(1)
 
         const fragment = await Bun.file("./view/character-list.html").text()
-        const f = Mustache.render(fragment, {list: characters});
+        const f = Mustache.render(fragment, character);
         return new Response(f, {headers:{'Content-Type': 'html'}});
       }
     }

@@ -33,7 +33,7 @@ export function createCharacter(payload: Omit<Character, "id">): Character | nul
         return null
     }
 
-    const q = db.query("INSERT INTO character (userId, name, str, int, wil, hlt, agi) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)")
+    const q = db.query("INSERT INTO character (userId, name, str, int, wil, hlt, agi) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7) RETURNING *")
 
     const character = q.get({
         "?1": payload.userId,

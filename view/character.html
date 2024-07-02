@@ -5,10 +5,14 @@
         hx-post="/character/list"
         hx-trigger="click"
         hx-target=".character-list"
-        hx-swap="outerHTML"
+        hx-swap="beforeend"
     >
         create
     </button>
-    {{> characterList}}
+    <div class="character-list">
+        {{#list}}
+            {{> characterList}}
+        {{/list}}
+    </div>  
     </div>
 </div>  
